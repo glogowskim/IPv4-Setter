@@ -36,6 +36,7 @@ namespace IPv4Setter
             Process cmd = new Process();
             cmd.StartInfo.FileName = "cmd.exe";
             cmd.StartInfo.RedirectStandardInput = true;
+            cmd.StartInfo.RedirectStandardOutput = true;
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
@@ -43,6 +44,7 @@ namespace IPv4Setter
             cmd.StandardInput.WriteLine(arg);
             cmd.StandardInput.Flush();
             cmd.StandardInput.Close();
+            System.Console.WriteLine(cmd.StandardOutput.ReadToEnd());
             cmd.WaitForExit();
         }
 
@@ -124,6 +126,7 @@ namespace IPv4Setter
         private static void InitializeWindow()
         {
             window = new Window();
+
             window.AboutVersionLabel.Text += version;
 
             //Add actions to Buttons
@@ -159,6 +162,7 @@ namespace IPv4Setter
             {
                 Config.Load(configPath);
                 InitWindowTextFields();
+                LoadArguments();
             }
             catch (System.IO.FileNotFoundException e)
             {
