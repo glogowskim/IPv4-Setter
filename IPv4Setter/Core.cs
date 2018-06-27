@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace IPv4Setter
 {
@@ -14,7 +15,10 @@ namespace IPv4Setter
 
         //Some obvious variables
         private static string configPath = "config.cfg";
-        private static string version = "0.1";
+        private static string version = "0.1.2";
+
+        //Regex for validation IPv4 read from user
+        private static Regex regex = new Regex("^([0-9]|[1-9][0-9]|[1-9][0-9][0-9])[.]([0-9]|[1-9][0-9]|[1-9][0-9][0-9])[.]([0-9]|[1-9][0-9]|[1-9][0-9][0-9])[.]([0-9]|[1-9][0-9]|[1-9][0-9][0-9])$");
 
         private static Window window;
 
@@ -53,23 +57,11 @@ namespace IPv4Setter
         /// </summary>
         private static void SaveNewConfig()
         {
-            bool validationError = false;
-
             string ip = window.IpTextBox.Text;
             string mask = window.MaskTextBox.Text;
             string gateway = window.GatewayTextBox.Text;
 
-            //SIMPLE DATA VALIDATION
-            //TO-DO: Edit validation - consider all cases
-            if (ip.Count(x => x == '.') != 3 || mask.Count(x => x == '.') != 3 || gateway.Count(x => x == '.') != 3) validationError = true;
-            if (ip.ToUpper() != ip || mask.ToUpper() != mask || gateway.ToUpper() != gateway) validationError = true;
-            if (ip.ToLower() != ip || mask.ToLower() != mask || gateway.ToLower() != gateway) validationError = true;
-
-            if (validationError)
-            {
-                System.Windows.Forms.MessageBox.Show("Please enter correct data!", "Validation issue", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
-            }
-            else
+            if (regex.IsMatch(ip) && regex.IsMatch(mask) && regex.IsMatch(gateway))
             {
                 SetNormalMode();
 
@@ -77,6 +69,10 @@ namespace IPv4Setter
                 Config.SetValue("mask", mask);
                 Config.SetValue("gateway", gateway);
                 Config.Save(configPath);
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Please enter correct data!", "Validation issue", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
             }
 
         }
