@@ -15,7 +15,7 @@ namespace IPv4Setter
 
         //Some obvious variables
         private static string configPath = "config.cfg";
-        private static string version = "0.1.2";
+        private static string version = "0.1.3";
 
         //Regex for validation IPv4 read from user
         private static Regex regex = new Regex("^([0-9]|[1-9][0-9]|[1-9][0-9][0-9])[.]([0-9]|[1-9][0-9]|[1-9][0-9][0-9])[.]([0-9]|[1-9][0-9]|[1-9][0-9][0-9])[.]([0-9]|[1-9][0-9]|[1-9][0-9][0-9])$");
